@@ -1,5 +1,7 @@
 import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
+import 'services/api_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,9 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
+      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
+
   final String title;
 
   @override
@@ -31,14 +32,24 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  final ApiService api = ApiService();
 
   void _incrementCounter() {
     setState(() {
       _counter++;
-      print('[INFO] Se crecio a $_counter');
-      debugPrint('Se aumentó a $_counter');
-      developer.log('Este es un mensaje de log', name: 'mi.app.tag');
+      //Ejemplos de como imprimir mensajes (developer.log no funciona con Logcat)
+      //print('[INFO] Se crecio a $_counter');
+      //debugPrint('Se aumentó a $_counter');
+      //developer.log('Este es un mensaje de log', name: 'mi.app.tag');
     });
+  }
+
+  Future<void> manejarrespuesta() async{
+    final respuesta = await api.obtenerRespuesta();
+    
+    debugPrint("[API] Respuesta: ${respuesta}");
+    debugPrint("[API] Estatus: ${respuesta['ok']}");
+    debugPrint("[API] La API dice que: ${respuesta['mensaje']}");
   }
 
   @override
@@ -61,7 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        //onPressed: _incrementCounter,
+        onPressed: manejarrespuesta,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
