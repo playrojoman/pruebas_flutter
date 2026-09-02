@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 
 void main() {
@@ -34,6 +35,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void _incrementCounter() {
     setState(() {
       _counter++;
+      print('[INFO] Se crecio a $_counter');
+      debugPrint('Se aumentó a $_counter');
+      developer.log('Este es un mensaje de log', name: 'mi.app.tag');
     });
   }
 
